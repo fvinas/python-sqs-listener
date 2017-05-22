@@ -34,8 +34,6 @@ class SqsLauncher(object):
                                     to finish execution. See http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html
                                     for more information
         """
-        if not os.environ.get('AWS_ACCOUNT_ID', None):
-            raise EnvironmentError('Environment variable `AWS_ACCOUNT_ID` not set')
         self._client = boto3.client('sqs')
         self._queue_name = queue
         queues = self._client.list_queues()

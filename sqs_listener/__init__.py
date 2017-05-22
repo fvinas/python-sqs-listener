@@ -34,8 +34,6 @@ class SqsListener(object):
         :param queue: (str) name of queue to listen to
         :param kwargs: error_queue=None, interval=60, visibility_timeout='600', error_visibility_timeout='600', force_delete=False
         """
-        if not os.environ.get('AWS_ACCOUNT_ID', None):
-            raise EnvironmentError('Environment variable `AWS_ACCOUNT_ID` not set')
         self._queue_name = queue
         self._poll_interval = kwargs["interval"] if 'interval' in kwargs else 60
         self._queue_visibility_timeout = kwargs['visibility_timeout'] if 'visibility_timeout' in kwargs else '600'
@@ -84,9 +82,7 @@ class SqsListener(object):
             )
 
         else:
-            qs = sqs.get_queue_url(QueueName=self._queue_name,
-                                   QueueOwnerAWSAccountId=os.environ.get('AWS_ACCOUNT_ID', None))
-            self._queue_url = qs['QueueUrl']
+        	self._queue_url = sqs.get_queue_url(QueueName=self._queue_name)['QueueUrl']
         return sqs
 
     def _start_listening(self):
